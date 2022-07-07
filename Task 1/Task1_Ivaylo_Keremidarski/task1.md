@@ -6,7 +6,7 @@
 docker build --tag test_app.py . 
 ```
 
-In case of a permission error:
+If you get a permission error:
 ```shell
 sudo chmod 666 /var/run/docker.sock
 ```
