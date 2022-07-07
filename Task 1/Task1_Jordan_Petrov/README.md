@@ -15,7 +15,7 @@ app.py          latest           577aea6d18c4   2 minutes ago   45.2MB
 ```
 ## 3. Run the container
 ```
-docker run --publish 800:800 app.py
+docker run --publish 8000:8000 app.py
 ```
 
 If I open another terminal and check the list of running containers
