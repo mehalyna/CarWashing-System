@@ -13,17 +13,34 @@ OUTPUT
 REPOSITORY      TAG              IMAGE ID       CREATED         SIZE
 app.py          latest           577aea6d18c4   2 minutes ago   45.2MB
 ```
-## 3. Run the container
+## 3. Create an unstarted container
 ```
-docker run --publish 8000:8000 app.py
+docker create --name my-python-script app.py
 ```
-
-If I open another terminal and check the list of running containers
+Check that the container is created
 ```
-docker ps
+docker ps -a
 ```
 OUTPUT
 ```
-CONTAINER ID   IMAGE     COMMAND              CREATED              STATUS              PORTS                                       NAMES
-d8eecdb7d235   app.py    "python3 ./app.py"   About a minute ago   Up About a minute   0.0.0.0:8000->8000/tcp, :::8000->8000/tcp   charming_wu
+CONTAINER ID   IMAGE                COMMAND                  CREATED         STATUS                    PORTS     NAMES
+1ee19dee3ca8   app.py               "python3 ./app.py"       3 minutes ago   Created                             my-python-script
+
+```
+## 4. Start the container
+```
+docker start my-python-script
+```
+## 5. Check the logs
+```
+docker logs -f my-python-script 
+```
+OUTPUT
+```
+INFO:my_first_docker_app:It works, go to the next iteration.
+INFO:my_first_docker_app:It works, go to the next iteration.
+INFO:my_first_docker_app:It works, go to the next iteration.
+INFO:my_first_docker_app:It works, go to the next iteration.
+INFO:my_first_docker_app:It works, go to the next iteration.
+...
 ```
