@@ -1,4 +1,4 @@
-# Task 1
+# Task 1 - Ivaylo Keremidarski
 ## Run simple Python script in Docker
 
 ### 1. Build the container:
