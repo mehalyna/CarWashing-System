@@ -1,9 +1,9 @@
 # Task 1 - Ivaylo Keremidarski
 ## Run simple Python script in Docker
 
-### 1. Build the container:
-```shell
-docker build --tag test_app.py . 
+### 1. Build the Docker Image
+```
+docker build --tag test_app.py .
 ```
 
 If you get a permission error:
