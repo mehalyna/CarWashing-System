@@ -11,6 +11,12 @@ If you get a permission error:
 sudo chmod 666 /var/run/docker.sock
 ```
 
+Output
+```
+REPOSITORY    TAG       IMAGE ID       CREATED        SIZE
+test_app.py   latest    0cf7a4d758b4   46 hours ago   920MB
+```
+
 ### 2. Run the container
 ```shell
 docker run --publish 5001:5001 test_app.py
