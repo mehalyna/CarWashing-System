@@ -31,3 +31,16 @@ ef11bd009eb3   test_app.py   "python3 ./test_app.…"   9 seconds ago   Created 
 ```
 docker start simple_python_script
 ```
+
+### 4. Check the logs
+```
+docker logs -f simple_python_script
+```
+
+Output
+```
+INFO:my_first_docker_app:It works, go to the next iteration.
+INFO:my_first_docker_app:It works, go to the next iteration.
+INFO:my_first_docker_app:It works, go to the next iteration.
+...
+```
