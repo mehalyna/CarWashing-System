@@ -17,10 +17,11 @@ REPOSITORY    TAG       IMAGE ID       CREATED        SIZE
 test_app.py   latest    0cf7a4d758b4   46 hours ago   920MB
 ```
 
-### 2. Run the container
+### 2. Create a Container
 ```shell
-docker run --publish 5001:5001 test_app.py
+docker create --name simple_python_script test_app.py
 ```
+
 
 ### 3. Stop the container
 ```shell
