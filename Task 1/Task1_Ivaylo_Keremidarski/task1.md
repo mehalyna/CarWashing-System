@@ -3,12 +3,12 @@
 
 ### 1. Build the Docker Image
 ```
-docker build --tag test_app.py .
+$ docker build --tag test_app.py .
 ```
 
 If you get a permission error:
 ```
-sudo chmod 666 /var/run/docker.sock
+$ sudo chmod 666 /var/run/docker.sock
 ```
 
 Output
