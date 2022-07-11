@@ -1,6 +1,6 @@
 ### Run simple Python script in Docker
 
-1. Build a container
+1. Build an image
 ```shell
 docker build --tag app.py . 
 ```
@@ -9,7 +9,7 @@ If you get an error "Got permission denied while trying to connect to the Docker
 sudo chmod 666 /var/run/docker.sock
 ```
 
-2. Run the container
+2. Run
 ```shell
-docker run --publish 5001:5001 app.py
+docker run app.py
 ```
