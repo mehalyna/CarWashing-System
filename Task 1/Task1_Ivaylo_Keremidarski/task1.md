@@ -19,7 +19,7 @@ test_app.py   latest    0cf7a4d758b4   46 hours ago   920MB
 
 ### 2. Create a Container
 ```
-docker create --name simple_python_script test_app.py
+$ docker create --name simple_python_script test_app.py
 ```
 Output
 ```
@@ -29,12 +29,12 @@ ef11bd009eb3   test_app.py   "python3 ./test_app.…"   9 seconds ago   Created 
 
 ### 3. Start the Container
 ```
-docker start simple_python_script
+$ docker start simple_python_script
 ```
 
 ### 4. Check the logs
 ```
-docker logs -f simple_python_script
+$ docker logs -f simple_python_script
 ```
 
 Output
