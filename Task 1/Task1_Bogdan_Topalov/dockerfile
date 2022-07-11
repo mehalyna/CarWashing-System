@@ -1,0 +1,6 @@
+FROM python:latest
+
+ADD script.py .
+
+CMD ["python", "./script.py"]
+
