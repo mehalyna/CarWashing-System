@@ -1,5 +1,4 @@
-# Task 1 - Ivaylo Keremidarski
-## Run simple Python script in Docker
+# Task 1 - Run simple Python script in Docker /Ivaylo Keremidarski
 
 ### 1. Build the Docker Image
 ```
