@@ -15,4 +15,32 @@
 
 #### Create tables and insert data from sql file with:
 
-`psql -h 'localhost' -p 'port' -d 'db name' -U 'user name' < 'file.sql'`
+`psql -h 'localhost' -p 'port' -d 'db name' -U 'user name' < 'file.sql'`  
+
+#### Show TABLES:
+
+```
+db=# \dt
+                List of relations
+ Schema |       Name       | Type  |    Owner     
+--------+------------------+-------+--------------
+ public | accounts         | table | postgresUser
+ public | carwash_places   | table | postgresUser
+ public | carwash_services | table | postgresUser
+ public | carwashes        | table | postgresUser
+ public | order_details    | table | postgresUser
+ public | orders           | table | postgresUser
+ public | places           | table | postgresUser
+ public | services         | table | postgresUser
+ public | users            | table | postgresUser
+```
+#### Join TABLES:
+
+```
+db=# SELECT full_name, email FROM accounts JOIN users ON accounts.user_id=users.user_id;
+    full_name    |       email       
+-----------------+-------------------
+ Ivan Petrov     | ivan@ivan.com
+ Georgi Stoyanov | georgi@georgi.com
+ Maria Vlahova   | maria@maria.com
+```
