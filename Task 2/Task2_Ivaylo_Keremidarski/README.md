@@ -15,7 +15,7 @@ Output:
 output
 ```
 
-If you don't have `psql`:
+*If you don't have `psql`:
 ```
 $ sudo apt-get update
 $ sudo apt install postgresql postgresql-contrib 
@@ -25,6 +25,8 @@ $ sudo apt install postgresql postgresql-contrib
 ```
 $ psql -h localhost -p 5432 -U postgres
 ```
+*Enter password if asked.
+
 Output:
 ```
 postgres=#
