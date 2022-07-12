@@ -8,12 +8,17 @@ And I am making sure that I start the terminal one directory before the db direc
 
 ## 1. Creating the db and it's tables
 
+```psql -h localhost -U postgres``` for connecting
+
+```CREATE DATABASE carwashdb;``` creating database
+
+```exit```
+
 ```psql -h localhost -U postgres < db/carwash/CREATE_DB.sql```
 
 OUTPUT
 
 ```
-CREATE DATABASE
 You are now connected to database "carwashdb" as user "postgres".
 CREATE TABLE
 CREATE TABLE
