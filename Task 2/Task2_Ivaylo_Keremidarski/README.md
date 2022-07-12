@@ -6,7 +6,11 @@ Ivaylo Keremidarski
 $ docker container run -d --name=pg -p 5432:5432 -e POSTGRES_PASSWORD=secret -e PGDATA=/pgdata -v /pgdata:/pgdata postgres:14.4
 ```
 
-Output
+Check the Container:
+```
+docker container ls
+```
+Output:
 ```
 output
 ```
@@ -17,4 +21,17 @@ $ sudo apt-get update
 $ sudo apt install postgresql postgresql-contrib 
 ```
 
+### 2. Connect to PostgresSQL
+```
+$ psql -h localhost -p 5432 -U postgres
+```
+Output
+```
+postgres=#
+```
+
+### 3. Create a database
+```
+$ 
+```
 
