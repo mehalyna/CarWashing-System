@@ -25,7 +25,7 @@ $ sudo apt install postgresql postgresql-contrib
 ```
 $ psql -h localhost -p 5432 -U postgres
 ```
-Output
+Output:
 ```
 postgres=#
 ```
