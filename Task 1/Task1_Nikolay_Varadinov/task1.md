@@ -1,23 +1,25 @@
+#### Build image from dockerfile:
+- first: takes python:3.10.5-slim-buster image.
+- second: from the first image and with app.py creates py-app-docker image:
 
-# first: takes python:3.10.5-slim-buster image.
-# second: from the first image and with app.py creates py-app-docker image:
-docker image build --tag py-app-docker .
+`docker image build --tag py-app-docker .`
 
----------------------------------------------------------------------------
+#### With --rm for removing the container after run it:
 
-# with --rm for removing the container after run it:
-docker run --rm py-app-docker 
+`docker run --rm py-app-docker` 
 
----------------------------------------------------------------------------
+#### To create container without run it:
 
-# to create container without run it:
-docker container create py-app-docker
+`docker container create py-app-docker`
 
-# take container id:
-docker container ls -a
+#### Take container id:
 
-# to run it with -a for attaching STDOUT/STDERR:
-docker container start -a CONTAINER_ID
+`docker container ls -a`
 
-# or run and follow logs with:
- docker logs -f CONTAINER_ID
+#### To run it with -a for attaching STDOUT/STDERR:
+
+`docker container start -a CONTAINER_ID`
+
+#### or run and follow logs with:
+
+`docker logs -f CONTAINER_ID`
