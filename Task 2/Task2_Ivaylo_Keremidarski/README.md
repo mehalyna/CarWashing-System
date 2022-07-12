@@ -14,10 +14,7 @@ output
 If you don't have `psql`:
 ```
 $ sudo apt-get update
-```
-```
 $ sudo apt install postgresql postgresql-contrib 
 ```
-
 
 
