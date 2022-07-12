@@ -1,5 +1,3 @@
-CREATE DATABASE carwashdb;
-
 \c carwashdb
 
 \i db/carwash/schema/carwashes.sql
