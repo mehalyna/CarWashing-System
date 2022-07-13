@@ -21,7 +21,7 @@ test_app.py   latest    0cf7a4d758b4   46 hours ago   920MB
 ```
 $ docker create --name simple_python_script test_app.py
 ```
-Output
+Output:
 ```
 CONTAINER ID   IMAGE         COMMAND                  CREATED         STATUS      PORTS     NAMES
 ef11bd009eb3   test_app.py   "python3 ./test_app.…"   9 seconds ago   Created               simple_python_script
@@ -37,7 +37,7 @@ $ docker start simple_python_script
 $ docker logs -f simple_python_script
 ```
 
-Output
+Output:
 ```
 INFO:my_first_docker_app:It works, go to the next iteration.
 INFO:my_first_docker_app:It works, go to the next iteration.
