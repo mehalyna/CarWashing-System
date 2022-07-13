@@ -1,0 +1,23 @@
+Step one: running Postgres in Docker Container
+
+$ docker container run -d --name=pg -p 5432:5432 -e POSTGRES_PASSWORD=secret -e PGDATA=/pgdata -v /pgdata:/pgdata postgres:14.4
+
+Step two: checking the container 
+
+docker container ls
+
+$ sudo apt-get update
+$ sudo apt install postgresql postgresql-contrib 
+
+Step three: connecting Postgres
+
+psql -h localhost -p 'port' -U 'user name' -d postgres
+
+Create DB with:
+psql> create database 'db name'
+
+psql> \c 'db name' - connect to database
+psql> \l - list databases
+
+Create tables and insert data from sql file with:
+psql -h 'localhost' -p 'port' -d 'db name' -U 'user name' < 'file.sql'
