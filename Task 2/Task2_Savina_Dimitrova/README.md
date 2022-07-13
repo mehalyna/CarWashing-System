@@ -60,6 +60,15 @@ psql (14.4 (Ubuntu 14.4-0ubuntu0.22.04.1))
 Type "help" for help.
 
 postgres=# 
+```
+Then, using CREATE DATABASE and \c to create and connect to database named "db"
+```bash
+postgres=# CREATE DATABASE db;
+CREATE DATABASE
+postgres=# \c db; 
+You are now connected to database "db" as user "postgres".
+db=# 
+
 
 
 
