@@ -69,7 +69,18 @@ postgres=# \c db;
 You are now connected to database "db" as user "postgres".
 db=# 
 
+```
+In order to import an sql file into the database created:
+```bash
+psql -h localhost -d db -U postgres < *** -- whatever file
+```
+To check databases use 
+```bash
+db=# \l
 
-
+```
+To check tables use
+```bash
+db=#\dt
 
 ```
