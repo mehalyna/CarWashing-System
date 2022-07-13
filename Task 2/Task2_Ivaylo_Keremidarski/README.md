@@ -37,7 +37,7 @@ postgres=#
 postgres=# CREATE DATABASE car_wash_db
 ```
 
-### 4. Create the tables
+### 4. Create tables
 ```
 $ psql -h localhost -p 5432 -U postgres < CREATE_TABLES.sql
 ```
