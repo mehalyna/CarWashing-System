@@ -52,5 +52,15 @@ postgres     latest    1133a9cdc367   28 hours ago   376MB
 ```
 Then connect. 
 ```bash
-psql -h localhost -p port -U postgres -d postgres
+psql -h localhost -U postgres
+
+OUTPUT:
+Password for user postgres: 
+psql (14.4 (Ubuntu 14.4-0ubuntu0.22.04.1))
+Type "help" for help.
+
+postgres=# 
+
+
+
 ```
