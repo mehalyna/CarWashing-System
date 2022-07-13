@@ -34,6 +34,16 @@ postgres=#
 
 ### 3. Create a database
 ```
-$ 
+postgres=# CREATE DATABASE car_wash_db
+```
+
+### 4. Create the tables
+```
+$ psql -h localhost -p 5432 -U postgres < CREATE_TABLES.sql
+```
+
+### 5. Insert data into the tables
+```
+$ psql -h localhost -p 5432 -U postgres < INSERT_DATA.sql
 ```
 
