@@ -9,9 +9,3 @@
 \i db/carwash/schema/places.sql
 \i db/carwash/schema/services.sql
 \i db/carwash/schema/users.sql
-
-
-
-
-
-
