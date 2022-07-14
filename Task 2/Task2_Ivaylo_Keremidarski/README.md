@@ -16,12 +16,7 @@ $ sudo apt install postgresql postgresql-contrib
 ```
 $ psql -h localhost -p 5432 -U postgres
 ```
-*Enter password if asked.
-
-Output:
-```
-postgres=#
-```
+**Enter password if asked.*
 
 ### 3. Create a database
 ```
