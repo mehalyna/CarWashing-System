@@ -6,7 +6,7 @@ Ivaylo Keremidarski
 $ docker container run -d --name=pg -p 5432:5432 -e POSTGRES_PASSWORD=secret -e PGDATA=/pgdata -v /pgdata:/pgdata postgres:14.4
 ```
 
-*If you don't have `psql`:
+**If you don't have `psql`:*
 ```
 $ sudo apt-get update
 $ sudo apt install postgresql postgresql-contrib 
