@@ -1,0 +1,9 @@
+\i data/Users.sql
+\i data/Accounts.sql 
+\i data/Carwashes.sql 
+\i data/PLaces.sql
+\i data/Carwash_Places.sql
+\i data/Services.sql
+\i data/Carwash_Services.sql
+\i data/Orders.sql
+\i data/Order_Details.sql
