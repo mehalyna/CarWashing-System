@@ -4,31 +4,17 @@ import argparse
 import psycopg2
 
 
-AVAILABLE_TABLES = (
-    'car_washes',
-    'places',
-    'car_wash_places',
-    'services',
-    'car_wash_services',
-    'users',
-    'accounts',
-    'orders',
-    'order_details',
-)
-INSTRUCTION_MESSAGE = 'This is a list of all available tables in the database. ' \
-                      'Please make an input what you want to see.'
-
-
-def add_arguments():
+def add_arguments() -> dict:
     """Initialize available arguments for user to pass to the program"""
 
     parser = argparse.ArgumentParser(prog='Database Connection')
-    parser.add_argument('Mode', help='r=Read Mode, rw=Read/Write')
-    args = vars(parser.parse_args())
+    parser.add_argument('-ro, -rw', '--read-only, --read-write', default='-ro')
+    args = parser.parse_args()
     return args
 
 
 class Singleton:
+
     """Base class to limit pools to one"""
 
     _instance = None
@@ -42,6 +28,7 @@ class Singleton:
 
 
 class DatabaseConnection:
+
     """Database connection interface"""
 
     DATABASE = 'postgres'
@@ -67,7 +54,8 @@ class DatabaseConnection:
         return self.__connection
 
 
-class ConnectionPool(Singleton):
+class ConnectionPool(metaclass=Singleton):
+
     """Connection pool"""
 
     # Read-only username constants
@@ -75,13 +63,11 @@ class ConnectionPool(Singleton):
     READ_ONLY_PASSWORD = 'unbreakable_password123'
 
     # Read/Write username constants
-    READ_WRITE_USERNAM3 = 'read_write_user'
+    READ_WRITE_USERNAME = 'read_write_user'
     READ_WRITE_PASSWORD = 'another_unbreakabale_password'
 
     def __init__(self) -> None:
         """Upon initialization, establish two connections (read-only and read/write) and add them to the pool"""
-
-        super().__init__()
 
         connection = DatabaseConnection()
         self.read_only = connection.connect_to_database(self.READ_ONLY_USERNAME, self.READ_ONLY_PASSWORD)
