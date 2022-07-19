@@ -20,8 +20,8 @@ class SingletonMeta(type):
     def __call__(cls, *args, **kwargs) -> object:
         if cls not in cls._instances:
             instance = super().__call__(*args, **kwargs)
-            cls._instances[cls] = instance
-        return cls._instances[cls]
+            cls._instances[cls.__name__] = instance
+        return cls._instances[cls.__name__]
 
 
 class Connection:
@@ -70,12 +70,8 @@ class Cursor:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.currs.close()
         self.conn.commit()
-        if self.pool_cls_name == PoolReadConn.__name__:  # Use the singleton to take the pool
-            ro_pool = PoolReadConn()
-            ro_pool.push((self.pool_cls_name, self.conn))
-        else:
-            rw_pool = PoolWriteConn()
-            rw_pool.push((self.pool_cls_name, self.conn))
+        pool = SingletonMeta._instances[self.pool_cls_name]
+        pool.push((self.pool_cls_name, self.conn))
         logging.info('Connection PUSHED')
 
 
