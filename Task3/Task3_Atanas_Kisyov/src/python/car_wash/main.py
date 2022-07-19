@@ -1,86 +1,10 @@
 import logging
 
-import argparse
-import psycopg2
+from db_connection import ConnectionPool
+from utils.parse_arguments import add_arguments
 
 
-def add_arguments() -> dict:
-    """Initialize available arguments for user to pass to the program"""
-
-    parser = argparse.ArgumentParser(prog='Database Connection')
-    parser.add_argument('-ro, -rw', '--read-only, --read-write', default='-ro')
-    args = parser.parse_args()
-    return args
-
-
-class Singleton:
-
-    """Base class to limit pools to one"""
-
-    _instance = None
-
-    def __new__(cls, *args: tuple, **kwargs: dict):
-        """Create an instance only on first call"""
-
-        if not cls._instance:
-            cls._instance = super().__new__(cls, *args, **kwargs)
-        return cls._instance
-
-
-class DatabaseConnection:
-
-    """Database connection interface"""
-
-    DATABASE = 'postgres'
-
-    CONNECTION_SUCCESSFUL_LOGG_MESSAGE = 'Connection successful!'
-    CONNECTION_UNSUCCESSFUL_LOGG_MESSAGE = 'Connection failed! See exception message and try again!'
-
-    def __init__(self):
-        self.__connection = None
-
-    def connect_to_database(self, username: str, password: str):
-        """Establish connection using psycopg2"""
-
-        try:
-            self.__connection = psycopg2.connect(f"dbname={self.DATABASE} \
-            user={username} password={password} host=localhost")
-        except psycopg2.OperationalError as e:
-            logging.critical(self.CONNECTION_UNSUCCESSFUL_LOGG_MESSAGE)
-            logging.critical(e)
-            exit(1)
-
-        logging.info(self.CONNECTION_SUCCESSFUL_LOGG_MESSAGE)
-        return self.__connection
-
-
-class ConnectionPool(metaclass=Singleton):
-
-    """Connection pool"""
-
-    # Read-only username constants
-    READ_ONLY_USERNAME = 'read_only_user'
-    READ_ONLY_PASSWORD = 'unbreakable_password123'
-
-    # Read/Write username constants
-    READ_WRITE_USERNAME = 'read_write_user'
-    READ_WRITE_PASSWORD = 'another_unbreakabale_password'
-
-    def __init__(self) -> None:
-        """Upon initialization, establish two connections (read-only and read/write) and add them to the pool"""
-
-        connection = DatabaseConnection()
-        self.read_only = connection.connect_to_database(self.READ_ONLY_USERNAME, self.READ_ONLY_PASSWORD)
-        self.read_write = connection.connect_to_database(self.READ_WRITE_USERNAME, self.READ_WRITE_PASSWORD)
-
-        # r -> read only, rw -> read/write
-        self.pool = {
-            'r': self.read_only,
-            'rw': self.read_write
-        }
-
-
-if __name__ == '__main__':
+def main():
     """Interact with user"""
 
     # Create pool
@@ -102,3 +26,7 @@ if __name__ == '__main__':
     with connection as conn:
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM accounts').fetchall()
+
+
+if __name__ == '__main__':
+    main()
