@@ -71,6 +71,20 @@ def main() -> None:
     #     data = currs.fetchall()
     #     print(data)
 
+    """This works"""
+    # conn1 = rw_pool.pull()
+    # conn2 = rw_pool.pull()
+    # conn3 = rw_pool.pull()
+
+
+    # with Cursor(conn1) as currs:
+    #     currs.execute("INSERT INTO table_name (content) VALUES ('LET'S')")
+
+    # with Cursor(conn2) as currs:
+    #     currs.execute("INSERT INTO table_name (content) VALUES ('SEE')")
+
+    # with Cursor(conn3) as currs:
+    #     currs.execute("INSERT INTO table_name (content) VALUES ('THIS')")
 
 if __name__ == '__main__':
     main()
