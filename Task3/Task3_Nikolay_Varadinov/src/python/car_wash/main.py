@@ -44,23 +44,23 @@ def main() -> None:
 
 ##############################################################################
 
-    conn1 = ro_pool.pull()
-    conn2 = ro_pool.pull()
-    conn3 = ro_pool.pull()
+#     conn1 = ro_pool.pull()
+#     conn2 = ro_pool.pull()
+#     conn3 = ro_pool.pull()
 
-    with Cursor(conn1) as currs:
-        currs.execute("INSERT INTO table_name (content) VALUES ('LET')")
+#     with Cursor(conn1) as currs:
+#         currs.execute("INSERT INTO table_name (content) VALUES ('LET')")
 
-    with Cursor(conn2) as currs:
-        currs.execute("INSERT INTO table_name (content) VALUES ('SEE')")
+#     with Cursor(conn2) as currs:
+#         currs.execute("INSERT INTO table_name (content) VALUES ('SEE')")
 
-    with Cursor(conn3) as currs:
-        currs.execute("INSERT INTO table_name (content) VALUES ('THIS')")
+#     with Cursor(conn3) as currs:
+#         currs.execute("INSERT INTO table_name (content) VALUES ('THIS')")
 
-    with Cursor(ro_pool.pull()) as currs:
-        currs.execute("SELECT * FROM table_name")
-        data = currs.fetchall()
-        print(data)
+#     with Cursor(ro_pool.pull()) as currs:
+#         currs.execute("SELECT * FROM table_name")
+#         data = currs.fetchall()
+#         print(data)
 
 
 if __name__ == '__main__':
