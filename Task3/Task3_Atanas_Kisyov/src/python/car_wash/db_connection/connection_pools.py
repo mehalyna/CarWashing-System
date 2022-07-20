@@ -68,7 +68,7 @@ class ReadWritePool(ReadOnlyPool):
 
     """Read/Write connection pool"""
 
-    _pool = []
+    _pool = deque()
 
     def __init__(self, pool_size: int) -> None:
         super().__init__(pool_size)
