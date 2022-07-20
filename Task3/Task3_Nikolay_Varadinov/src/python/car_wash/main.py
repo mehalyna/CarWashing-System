@@ -16,7 +16,6 @@ def main() -> None:
     Finally: push connection
     """
 
-
     # argument parser with argparse module
     parser = argparse.ArgumentParser()
     parser.add_argument("--ro", type=int,
