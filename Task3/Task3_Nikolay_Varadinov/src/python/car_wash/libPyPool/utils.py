@@ -124,8 +124,8 @@ class PoolConn(metaclass=SingletonMeta):
 
 
 class PoolReadConn(PoolConn):
-    """Pool with connections used for reading from DB"""
+    """Pool with connections used for reading from DB."""
 
 
 class PoolWriteConn(PoolConn):
-    """Pool with connections used for writing in DB"""
+    """Pool with connections used for writing in DB."""
