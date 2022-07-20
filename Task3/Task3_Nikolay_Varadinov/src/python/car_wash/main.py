@@ -43,6 +43,7 @@ def main() -> None:
 
 
 ##############################################################################
+"""Use ro_pool and rw_pool"""
 
 #     conn1 = ro_pool.pull()
 #     conn2 = ro_pool.pull()
