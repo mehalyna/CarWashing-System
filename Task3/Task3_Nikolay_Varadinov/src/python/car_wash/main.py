@@ -3,33 +3,20 @@
 
 import argparse
 
-from libPyPool.utils import \
-    Connection, Cursor, PoolReadConn, PoolWriteConn, create_pools
+from libPyPool.utils import Cursor, PoolReadConn, PoolWriteConn
+from dbpool import CAR_WASH_DB_CONFIG as db_config
 
 
 def main() -> None:
     """
     First: create pools
     Second: populate pools with connections
-    Third: pull connection
-    Fourth: give cursor and execute query in with statement
+    Third: pull connection from pool
+    Fourth: set cursor and execute query in with statement
     Finally: push connection
     """
 
-    # parameters for creating database connection
-    params_dict = {
-        'host': 'localhost',
-        'port': 5432,
-        'user': 'postgres',
-        'password': 'pass',
-        'dbname': 'postgres'
-    }
 
-    # create string of key word arguments from params_dict
-    params = (" ").join(
-        f"{key}={value}" for key, value in params_dict.items())
-
-    
     # argument parser with argparse module
     parser = argparse.ArgumentParser()
     parser.add_argument("--ro", type=int,
@@ -48,45 +35,33 @@ def main() -> None:
     else:
         rw_num = 3
 
-        
-    pools = create_pools(ro_num, rw_num)    # create pools
-    ro_pool = pools['ro']
-    rw_pool = pools['rw']
-    ro_name = PoolReadConn.__name__
-    rw_name = PoolWriteConn.__name__
 
-    for _ in range(ro_num):    # populate pools with connections
-        with Connection(ro_name, params) as conn:
-            ro_pool.push(conn)
+    ro_pool = PoolReadConn(ro_num, db_config)  # Could be called with key word args
+    rw_pool = PoolWriteConn(rw_num, db_config) # Could be called with key word args
+    ro_pool.populate_pool()
+    rw_pool.populate_pool()
 
-    for _ in range(rw_num):    # populate pools with connections
-        with Connection(rw_name, params) as conn:
-            rw_pool.push(conn)
 
 ##############################################################################
-    """Examples how to use"""
-    
-    # with Cursor(rw_pool.pull()) as currs:
-    #     currs.execute("Insert sql")
 
-    # with Cursor(rw_pool.pull()) as currs:
-    #     currs.execute("Select sql")
-    #     data = currs.fetchall()
-    #     print(data)
+    conn1 = ro_pool.pull()
+    conn2 = ro_pool.pull()
+    conn3 = ro_pool.pull()
 
-    # conn1 = rw_pool.pull()
-    # conn2 = rw_pool.pull()
-    # conn3 = rw_pool.pull()
+    with Cursor(conn1) as currs:
+        currs.execute("INSERT INTO table_name (content) VALUES ('LET')")
 
+    with Cursor(conn2) as currs:
+        currs.execute("INSERT INTO table_name (content) VALUES ('SEE')")
 
-    # with Cursor(conn1) as currs:
-    #     currs.execute("INSERT INTO table_name (content) VALUES ('LET')")
+    with Cursor(conn3) as currs:
+        currs.execute("INSERT INTO table_name (content) VALUES ('THIS')")
 
-    # with Cursor(conn2) as currs:
-    #     currs.execute("INSERT INTO table_name (content) VALUES ('SEE')")
+    with Cursor(ro_pool.pull()) as currs:
+        currs.execute("SELECT * FROM table_name")
+        data = currs.fetchall()
+        print(data)
 
-    # with Cursor(conn3) as currs:
-    #     currs.execute("INSERT INTO table_name (content) VALUES ('THIS')")
 
 if __name__ == '__main__':
     main()
