@@ -13,7 +13,10 @@ logging.basicConfig(level=logging.INFO)
 
 class SingletonMeta(type):
 
-    """Singleton Meta class. It's classes will run __init__ only once"""
+    """Singleton Meta class. After first initialization of an instance
+       in its classes, any new changes to __init__ won't have effect on the
+       the returned instance.
+    """
 
     _instances = {}
 
@@ -24,24 +27,20 @@ class SingletonMeta(type):
         return cls._instances[cls.__name__]
 
 
-class Connection:
+class _Connection:
 
     """Create connection with custom context manager
      which does not close the connection
      """
 
-    def __init__(self, pool: str, conn_params=None, **kwargs) -> None:
-        self.pool = pool
-        if conn_params:
-            self.params = conn_params
-        else:
-            self.params = (" ").join(
-                f"{key}={value}" for key, value in kwargs.items())
+    def __init__(self, pool_name: str, config: str) -> None:
+        self.pool = pool_name
+        self.config = config
 
     def __enter__(self):
         try:
-            conn = psycopg2.connect(self.params)
-            return (self.pool, conn)
+            conn = psycopg2.connect(self.config)
+            return ((self.pool, conn))
         except psycopg2.Error as error:
             logging.info(error.diag.message_primary)
             return None
@@ -79,13 +78,33 @@ class PoolConn(metaclass=SingletonMeta):
 
     """Pool which is python list and strores DB connections."""
 
-    def __init__(self, size: int = 3) -> None:
-        """Pool and its size"""
+    @staticmethod
+    def stringer(db_config: dict) -> str:
+        """create string of key word arguments from params_dict"""
+
+        config = (" ").join(
+            f"{key}={value}" for key, value in db_config.items())
+        return config
+
+
+    def __init__(self, size: int, *args, **kwargs) -> None:
+        if len(args) != 0:
+            self.db_config = self.stringer(args[0])
+        else:
+            self.db_config = self.stringer(kwargs)
         self.pool = []
         self.size = size
+        self.name = self.__class__.__name__
         self._lock = Lock()
 
-    def pull(self) -> Connection:
+    def populate_pool(self):
+        """Create connections and add to pool"""
+
+        for _ in range(self.size):    # populate pool with connections
+            with _Connection(self.name, self.db_config) as conn:
+                self.pool.append(conn)
+
+    def pull(self) -> tuple:
         """Pull connection. Using Lock to prevent the race condition"""
 
         with self._lock:
@@ -95,11 +114,11 @@ class PoolConn(metaclass=SingletonMeta):
 
         raise Exception("No connecton available")
 
-    def push(self, conn: tuple) -> str:
+    def push(self, conn) -> str:
         """Push connection"""
 
         if len(self.pool) < self.size:
-            self.pool.append((conn))
+            self.pool.append(conn)
             return "Successfully adding to pool"
         raise Exception("Pool is full. Should not have this connection!")
 
@@ -110,15 +129,3 @@ class PoolReadConn(PoolConn):
 
 class PoolWriteConn(PoolConn):
     """Pool with connections used for writing in DB"""
-
-
-def create_pools(size_ro: int = 3, size_rw: int = 3) -> dict:
-    """Create read and write connection pools and returns
-    their instances in a dictionary with keys 'ro' and 'rw'
-    """
-
-    ro_pool = PoolReadConn(size_ro)
-    rw_pool = PoolWriteConn(size_rw)
-    logging.info('Pools CREATED')
-
-    return {'ro': ro_pool, 'rw': rw_pool}
