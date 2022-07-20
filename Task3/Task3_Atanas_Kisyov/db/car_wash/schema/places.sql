@@ -1,0 +1,4 @@
+CREATE TABLE places (
+    place_id INTEGER PRIMARY KEY,
+    place_name VARCHAR(100) UNIQUE
+);
