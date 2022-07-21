@@ -1,0 +1,7 @@
+2022-07-21 17:45:26,940 - Invalid connection parameters.
+2022-07-21 17:45:39,481 - Connection to db established, added needed connections to the pool.
+2022-07-21 17:45:39,518 - Connection to db established, added needed connections to the pool.
+2022-07-21 17:45:39,518 - Connection has been pooled out.
+2022-07-21 17:45:39,545 - Connection returned to the pool.
+2022-07-21 17:45:39,545 - Connection has been pooled out.
+2022-07-21 17:45:39,547 - Connection returned to the pool.
