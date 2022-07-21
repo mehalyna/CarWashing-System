@@ -1,5 +1,3 @@
-\c carwashdb
-
 \i db/carwash/data/car_wash.sql
 
 \i db/carwash/data/service.sql

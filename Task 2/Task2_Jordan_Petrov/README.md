@@ -141,4 +141,3 @@ OUTPUT
           9 | Twitterwire  | 4873 Colorado Terrace |                 39
          10 | Gabcube      | 410 Fuller Parkway    |                 33
 (10 rows)
-```
