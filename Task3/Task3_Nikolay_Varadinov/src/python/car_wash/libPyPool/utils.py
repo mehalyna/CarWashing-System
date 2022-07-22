@@ -43,7 +43,7 @@ class _Connection:
             return ((self.pool, conn))
         except psycopg2.Error as error:
             logging.info(error.diag.message_primary)
-            return None
+            return ()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if exc_tb:
@@ -107,12 +107,13 @@ class PoolConn(metaclass=SingletonMeta):
     def pull(self) -> tuple:
         """Pull connection. Using Lock to prevent the race condition"""
 
+        if len(self.pool) == 0:
+            print("Pool is empty. Try again later")
+            return self.name, None
         with self._lock:
-            if len(self.pool) >= 1:
-                logging.info('Connection PULLED')
-                return self.pool.pop()
-
-        raise Exception("No connecton available")
+            con_tup = self.pool.pop()
+            logging.info('Connection PULLED')
+            return con_tup
 
     def push(self, conn) -> str:
         """Push connection"""
@@ -124,8 +125,8 @@ class PoolConn(metaclass=SingletonMeta):
 
 
 class PoolReadConn(PoolConn):
-    """Pool with connections used for reading from DB."""
+    """Pool with connections used for reading from DB"""
 
 
 class PoolWriteConn(PoolConn):
-    """Pool with connections used for writing in DB."""
+    """Pool with connections used for writing in DB"""
