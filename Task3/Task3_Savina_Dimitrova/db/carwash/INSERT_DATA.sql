@@ -1,9 +1,0 @@
-\i data/insertusers.sql;
-\i data/insertorder_details.sql;
-\i data/insertservices.sql;
-\i data/insertplaces.sql;
-\i data/insertorders.sql;
-\i data/insertcarwash_services.sql;
-\i data/insertcarwash_places.sql;
-\i data/insertcarwashes.sql;
-\i data/insertaccounts.sql;
