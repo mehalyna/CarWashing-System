@@ -10,13 +10,32 @@ import psycopg2
 from utils.singleton import Singleton
 
 
-class PoolBaseClass(metaclass=Singleton):
+class PoolBaseClass(Singleton):
 
-    """Abstract base class for creating connection pools"""
+    """Base class for creating connection pools"""
 
-    def connection(self) -> psycopg2.connect:
+    @contextmanager
+    def connection(self) -> typing.Generator:
         """Get database connection from pool, yield it, and return it to the pool after it's no longer used"""
-        raise NotImplementedError('Method "connection" is not implemented in child class!')
+
+        # If there are no connections in the pool, wait until one is returned
+        while not self._pool:
+            logging.error('There are no free connections at the moment. Please wait for free connection...')
+            time.sleep(1)
+
+        # Get connection from pool and log it is successful
+        self._open_connection = self._pool.popleft()
+        logging.info('A free connection is pulled from the pool!')
+
+        yield self._open_connection
+
+        if self.__class__.__name__ == 'ReadWritePool':
+            self._open_connection.commit()
+
+        self._pool.append(self._open_connection)
+        self._open_connection = None
+        logging.info('Connection has been successfuly returned to the pool!')
+
 
     def _create_connection(self) -> psycopg2.connect:
         """Create connection and add it to the pool"""
@@ -44,6 +63,7 @@ class PoolBaseClass(metaclass=Singleton):
         log_message = f'{self.pool_size} connections are added to the pool!'
         logging.info(log_message)
 
+
 class ReadOnlyPool(PoolBaseClass):
 
     """Read-only connection pool"""
@@ -56,26 +76,6 @@ class ReadOnlyPool(PoolBaseClass):
         self._pool = deque()
         self.pool_size = pool_size
         self._open_connection = None
-
-    @contextmanager
-    def connection(self) -> typing.Generator:
-        """Get database connection from pool, yield it, and return it to the pool after it's no longer used"""
-
-        # If there are no connections in the pool, wait until one is returned
-        while not self._pool:
-            logging.error('There are no free connections at the moment. Please wait for free connection...')
-            time.sleep(1)
-
-        # Get connection from pool and log it is successful
-        self._open_connection = self._pool.popleft()
-        logging.info('A free connection is pulled from the pool!')
-
-        yield self._open_connection
-
-        # Return connection to the pool
-        self._pool.append(self._open_connection)
-        self._open_connection = None
-        logging.info('Connection has been successfuly returned to the pool!')
 
 
 class ReadWritePool(PoolBaseClass):
@@ -91,24 +91,3 @@ class ReadWritePool(PoolBaseClass):
         self._pool = deque()
         self.pool_size = pool_size
         self._open_connection = None
-    
-    @contextmanager
-    def connection(self) -> typing.Generator:
-        """Get database connection from pool, yield it, and return it to the pool after it's no longer used"""
-
-        # If there are no connections in the pool, wait until one is returned
-        while not self._pool:
-            logging.error('There are no free connections at the moment. Please wait for free connection...')
-            time.sleep(1)
-
-        # Get connection from pool and log it is successful
-        self._open_connection = self._pool.popleft()
-        logging.info('A free connection is pulled from the pool!')
-
-        yield self._open_connection
-
-        # Commit the connection and return it to the pool
-        self._open_connection.commit()
-        self._pool.append(self._open_connection)
-        self._open_connection = None
-        logging.info('Connection has been successfuly returned to the pool!')
