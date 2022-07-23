@@ -1,13 +1,13 @@
 """Singleton design pattern definition"""
-class Singleton:
+class Singleton(type):
 
     """Base class to limit pools to one"""
 
-    _instance = None
+    _instance = {}
 
-    def __new__(cls, *args: tuple, **kwargs: dict):
+    def __new__(cls, *args, **kwargs):
         """Create an instance only on first call"""
 
-        if not cls._instance:
-            cls._instance = super(Singleton, cls).__new__(cls)
-        return cls._instance
+        if cls not in cls._instance:
+            cls._instance[cls] = super().__new__(cls, *args, **kwargs)
+        return cls._instance[cls]

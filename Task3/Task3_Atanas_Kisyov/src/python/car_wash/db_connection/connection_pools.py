@@ -10,9 +10,20 @@ import psycopg2
 from utils.singleton import Singleton
 
 
-class PoolBaseClass(Singleton):
+class PoolBaseClass(metaclass=Singleton):
 
     """Base class for creating connection pools"""
+
+    def __init__(self, hostname: str, database_name: str,username: str, password: str, pool_size: int) -> None:
+        """Initialize pool"""
+
+        self.hostname = hostname
+        self.database_name = database_name
+        self.username = username
+        self.password = password
+        self._pool = deque()
+        self.pool_size = pool_size
+        self._open_connection = None
 
     @contextmanager
     def connection(self) -> typing.Generator:
@@ -54,7 +65,7 @@ class PoolBaseClass(Singleton):
             raise psycopg2.OperationalError()
     
     def populate_pool(self) -> None:
-        """Populate pool with read-only connections"""
+        """Populate pool with connections"""
         
         for _ in range(self.pool_size):
             connection = self._create_connection()
@@ -67,27 +78,10 @@ class PoolBaseClass(Singleton):
 class ReadOnlyPool(PoolBaseClass):
 
     """Read-only connection pool"""
-
-    def __init__(self, hostname: str, database_name: str,username: str, password: str, pool_size: int) -> None:
-        self.hostname = hostname
-        self.database_name = database_name
-        self.username = username
-        self.password = password
-        self._pool = deque()
-        self.pool_size = pool_size
-        self._open_connection = None
+    pass
 
 
 class ReadWritePool(PoolBaseClass):
 
     """Read/Write connection pool"""
-
-    def __init__(self, hostname: str, database_name: str,username: str, password: str, pool_size: int) -> None:
-        """Initialize read/write pool"""
-        self.hostname = hostname
-        self.database_name = database_name
-        self.username = username
-        self.password = password
-        self._pool = deque()
-        self.pool_size = pool_size
-        self._open_connection = None
+    pass

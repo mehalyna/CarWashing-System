@@ -1,5 +1,3 @@
-import logging
-
 from db_connection.config import USER_CREDENTIALS
 from db_connection.connection_pools import ReadOnlyPool, ReadWritePool
 from utils.parse_arguments import add_arguments
