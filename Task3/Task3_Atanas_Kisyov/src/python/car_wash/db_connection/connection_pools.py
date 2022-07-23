@@ -10,7 +10,7 @@ import psycopg2
 from utils.singleton import Singleton
 
 
-class PoolBaseClass(Singleton):
+class PoolBaseClass(metaclass=Singleton):
 
     """Abstract base class for creating connection pools"""
 
