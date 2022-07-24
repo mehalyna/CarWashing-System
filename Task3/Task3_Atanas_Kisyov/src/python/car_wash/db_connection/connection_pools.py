@@ -40,9 +40,7 @@ class PoolBaseClass(metaclass=Singleton):
 
         yield self._open_connection
 
-        if self.__class__.__name__ == 'ReadWritePool':
-            self._open_connection.commit()
-
+        self._open_connection.commit()
         self._pool.append(self._open_connection)
         self._open_connection = None
         logging.info('Connection has been successfuly returned to the pool!')
