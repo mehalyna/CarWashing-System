@@ -1,85 +1,110 @@
 """Read-only and read/write database connection pools definitions"""
-from collections import deque
-from contextlib import contextmanager
 import logging
 import time
 import typing
+from collections import deque
+from contextlib import contextmanager
 
 import psycopg2
 
 from utils.singleton import Singleton
 
 
-class PoolBaseClass(metaclass=Singleton):
+class PoolBaseClass:
 
     """Base class for creating connection pools"""
 
-    def __init__(self, hostname: str, database_name: str,username: str, password: str, pool_size: int) -> None:
+    def __init__(self,
+                hostname: str,
+                database_name: str,
+                username: str,
+                password: str,
+                pool_size: int=2,
+                ) -> None:
         """Initialize pool"""
 
         self.hostname = hostname
         self.database_name = database_name
         self.username = username
         self.password = password
-        self._pool = deque()
         self.pool_size = pool_size
-        self._open_connection = None
+        self._pool = deque()
 
-    @contextmanager
-    def connection(self) -> typing.Generator:
-        """Get database connection from pool, yield it, and return it to the pool after it's no longer used"""
-
-        # If there are no connections in the pool, wait until one is returned
-        while not self._pool:
-            logging.error('There are no free connections at the moment. Please wait for free connection...')
-            time.sleep(1)
-
-        # Get connection from pool and log it is successful
-        self._open_connection = self._pool.popleft()
-        logging.info('A free connection is pulled from the pool!')
-
-        yield self._open_connection
-
-        self._open_connection.commit()
-        self._pool.append(self._open_connection)
-        self._open_connection = None
-        logging.info('Connection has been successfuly returned to the pool!')
-
-
-    def _create_connection(self) -> psycopg2.connect:
+    def create_connection(self) -> psycopg2.connect:
         """Create connection and add it to the pool"""
 
         try:
             connection =  psycopg2.connect(
                 dbname=self.database_name,
                 host=self.hostname,
-                user=self.username, 
+                user=self.username,
                 password=self.password,
                 )
             logging.info('Connection successful!')
+            self.pool_size -= 1
             return connection
-        except psycopg2.OperationalError:
-            logging.critical('Connection failed! See exception message and try again!')
-            raise psycopg2.OperationalError()
-    
-    def populate_pool(self) -> None:
-        """Populate pool with connections"""
-        
-        for _ in range(self.pool_size):
-            connection = self._create_connection()
-            self._pool.append(connection)
+        except psycopg2.OperationalError as exception:
+            logging.critical('Connection failed! \
+                See exception message and try again!')
+            raise psycopg2.OperationalError(exception)
 
-        log_message = f'{self.pool_size} connections are added to the pool!'
-        logging.info(log_message)
+    def get_connection(self) -> psycopg2.connect:
+        """Get connection from the pool"""
+
+        # Create and return connection
+        # If the count is less than the pool max size
+        if self.pool_size > 0:
+            return self.create_connection()
+
+        # If there are no connections in the pool, wait until one is returned
+        while not self._pool:
+            logging.error('There are no free connections at the moment. \
+                Please wait for free connection...')
+            time.sleep(1)
+
+        # Get connection from pool and log it is successful
+        logging.info('A free connection is pulled from the pool!')
+        return self._pool.popleft()
+
+    def return_connection(self, connection: psycopg2.connect) -> None:
+        """Return connection to the pool"""
+
+        self._pool.append(connection)
+        logging.info('Connection has been successfully returned to the pool!')
 
 
-class ReadOnlyPool(PoolBaseClass):
+class ReadOnlyPool(PoolBaseClass, metaclass=Singleton):
 
     """Read-only connection pool"""
-    pass
+
+    @contextmanager
+    def connection(self) -> typing.Generator:
+        """
+        Get database connection from pool, yield it, and
+        return it to the pool after it's no longer used
+        """
+
+        open_connection = self.get_connection()
+        try:
+            yield open_connection
+        finally:
+            self.return_connection(open_connection)
 
 
-class ReadWritePool(PoolBaseClass):
+class ReadWritePool(PoolBaseClass, metaclass=Singleton):
 
     """Read/Write connection pool"""
-    pass
+
+    @contextmanager
+    def connection(self) -> typing.Generator:
+        """
+        Get database connection from pool, yield it,
+        commit and return it to the pool after it's no longer used
+        """
+
+        open_connection = self.get_connection()
+        try:
+            yield open_connection
+        finally:
+            open_connection.commit()
+            self.return_connection(open_connection)

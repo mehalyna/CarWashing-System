@@ -1,6 +1,7 @@
 """Constants that hold configuration values"""
 import logging
 
+# User credentials
 USER_CREDENTIALS = {
     'hostname': 'localhost',
     'database_name': 'postgres',
@@ -8,4 +9,5 @@ USER_CREDENTIALS = {
     'password': '1123QwER'
 }
 
-LOGGING_LEVEL = logging.basicConfig(level=logging.INFO)
+# Set logging level
+logging.basicConfig(level=logging.INFO)
