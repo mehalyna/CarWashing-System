@@ -60,11 +60,10 @@ class PoolConn(metaclass=SingletonMeta):
     def _pull(self) -> psycopg2.connect:  # type: ignore
         """Pull connection. Using Lock to prevent the race conditions."""
 
-        while len(self.pool) == 0:
-            time.sleep(1)
-            break
-
         with self._lock:
+            while len(self.pool) == 0:
+                logging.info("No connection available. Wait a second.")
+                time.sleep(1)
             conn = self.pool.pop()
             logging.info("Connection PULLED")
             return conn
@@ -109,7 +108,7 @@ class PoolReadConn(PoolConn):
         except psycopg2.Error:
             print(f"Problem with transaction {exc_info()}")
         except IndexError:
-            print("Wait a sec.")
+            print("Try again later.")
         else:
             curs.close()
             logging.info("Read from DB")
@@ -138,7 +137,7 @@ class PoolWriteConn(PoolConn):
         except psycopg2.Error:
             print(f"Problem with transaction {exc_info()}")
         except IndexError:
-            print("Wait a sec.")
+            print("Try again later.")
         else:
             conn.commit()
             curs.close()
