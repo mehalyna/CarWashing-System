@@ -28,6 +28,7 @@ class PoolConn(metaclass=SingletonMeta):
         self.pool = []
         self.size = size
         self._lock = Lock()
+        self.virgin = True
 
     @property
     def db_config(self) -> dict:
@@ -56,14 +57,15 @@ class PoolConn(metaclass=SingletonMeta):
                     conn = self.pool.pop()
                     logging.info("PULL")
                 break
-
             if one_try:
                 conn = psycopg2.connect(**self._db_config)
                 logging.info("Create connection")
                 break
             one_try += 1
-        else:
-            logging.info("Wait a sec.")
+            if self.virgin:
+                self.virgin = False
+                continue
+            logging.info("Wait a second.")
             time.sleep(1)
         return conn
 
@@ -91,9 +93,6 @@ class PoolReadConn(PoolConn):
             else:
                 conn.close()
                 logging.info("Close connection")
-
-
-
 
 class PoolWriteConn(PoolConn):
 
