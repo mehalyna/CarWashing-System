@@ -1,7 +1,7 @@
 import logging
 import sys
 
-from src.python.car_wash.dbpool import ro_db_pool, rw_db_pool
+from car_wash.dbpool import ro_db_pool, rw_db_pool
 
 
 def main():
@@ -22,7 +22,9 @@ def main():
     with ro_db_pool.connection() as cur:
         cur.execute('SELECT * FROM carwashasdasdes;')
         for row in cur.fetchall():
-            print(row)
+            logging.info(row)
+
 
 if __name__ == '__main__':
     main()
+    sys.exit(main)

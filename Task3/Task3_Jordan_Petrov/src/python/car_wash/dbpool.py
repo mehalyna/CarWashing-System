@@ -10,8 +10,8 @@ from threading import Lock
 
 import psycopg2
 
-from src.python.car_wash.config import READ_ONLY_USER, READ_WRITE_USER
-from utils import SingletonMeta
+from car_wash.config import READ_ONLY_USER, READ_WRITE_USER
+from car_wash.utils import SingletonMeta
 
 
 class DBPoolBase(metaclass=SingletonMeta):
@@ -51,6 +51,7 @@ class RODBPool(DBPoolBase):
         self._dbname = _dbname
         self._pool_size = pool_size
         self._conn_created = 0
+        self._log = logging.getLogger('ro_db_pool')
         self._lock = Lock()
 
     def _create_connection(self) -> psycopg2.connect:
@@ -62,7 +63,6 @@ class RODBPool(DBPoolBase):
 
     def _get_connection(self) -> psycopg2.connect:
         """Get connection from pool"""
-
         connection = None
         while not connection:
             with self._lock:
@@ -73,14 +73,13 @@ class RODBPool(DBPoolBase):
                         connection = self._create_connection()
                         self._conn_created += 1
                     else:
-                        logging.info('No connections available. Wait 0.1 second.')
+                        self._log.info('No connections available. Wait 0.1 second.')
                         time.sleep(0.1)
 
         return connection
 
     def _put_connection(self, conn: psycopg2.connect) -> None:
         """Put connection back to pool"""
-
         self._pool.append(conn)
 
     @contextmanager
@@ -89,22 +88,18 @@ class RODBPool(DBPoolBase):
         Context manager for the read only pool.
         Use cursor to execute queries.
         """
-
-        if len(self._pool) < self._pool_size and self._conn_created < self._pool_size:
-            self._pool.append(self._create_connection())
-            self._conn_created += 1
-
         conn = self._get_connection()
         cursor_ = conn.cursor()
         try:
             yield cursor_
-        except psycopg2.Error:
-            logging.error('Invalid query.')
+        except psycopg2.Error as err:
+            self._log.error('Issue during work with db: %s', err)
             conn.close()
             raise psycopg2.Error('Invalid query.')
-
-        cursor_.close()
-        self._put_connection(conn)
+        else:
+            self._put_connection(conn)
+        finally:
+            cursor_.close()
 
 
 class RWDBPool(DBPoolBase):
@@ -128,6 +123,7 @@ class RWDBPool(DBPoolBase):
         self._dbname = _dbname
         self._pool_size = pool_size
         self._conn_created = 0
+        self._log = logging.getLogger('rw_db_pool')
         self._lock = Lock()
 
     def _create_connection(self) -> psycopg2.connect:
@@ -139,7 +135,6 @@ class RWDBPool(DBPoolBase):
 
     def _get_connection(self) -> psycopg2.connect:
         """Get connection from pool"""
-
         connection = None
         while not connection:
             with self._lock:
@@ -150,14 +145,13 @@ class RWDBPool(DBPoolBase):
                         connection = self._create_connection()
                         self._conn_created += 1
                     else:
-                        logging.info('No connections available. Wait 0.1 second.')
+                        self._log.info('No connections available. Wait 0.1 second.')
                         time.sleep(0.1)
 
         return connection
 
     def _put_connection(self, conn: psycopg2.connect) -> None:
         """Put connection back to pool"""
-
         self._pool.append(conn)
 
     @contextmanager
@@ -166,23 +160,19 @@ class RWDBPool(DBPoolBase):
         Context manager for the read write pool.
         Use cursor to execute queries.
         """
-
-        if len(self._pool) < self._pool_size and self._conn_created < self._pool_size:
-            self._pool.append(self._create_connection())
-            self._conn_created += 1
-
         conn = self._get_connection()
         cursor_ = conn.cursor()
         try:
             yield cursor_
-        except psycopg2.Error:
-            logging.error('Invalid query.')
+        except psycopg2.Error as err:
+            self._log.error('Issue during work with db: %s', err)
             conn.close()
             raise psycopg2.Error('Invalid query.')
-
-        conn.commit()
-        cursor_.close()
-        self._put_connection(conn)
+        else:
+            conn.commit()
+            self._put_connection(conn)
+        finally:
+            cursor_.close()
 
 
 # Initialization of RO pool object
