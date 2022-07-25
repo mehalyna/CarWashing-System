@@ -38,6 +38,10 @@ class RODBPool(DBPoolBase):
 
         :Parameters:
             - `hostname` - DB hostname
+            - `password` - DB password
+            - `username` - DB username
+            - `_dbname` - DB name
+            - `pool_size` - size of pool
         """
         super().__init__()
         self._pool = []
@@ -111,6 +115,10 @@ class RWDBPool(DBPoolBase):
 
         :Parameters:
             - `hostname` - DB hostname
+            - `password` - DB password
+            - `username` - DB username
+            - `_dbname` - DB name
+            - `pool_size` - size of pool
         """
         super().__init__()
         self._pool = []
