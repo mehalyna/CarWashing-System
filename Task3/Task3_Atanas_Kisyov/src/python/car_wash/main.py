@@ -1,5 +1,6 @@
 """Main file which executes the script"""
 import sys
+import logging
 
 from config import USER_CREDENTIALS
 from db_connection.connection_pools import ReadOnlyPool, ReadWritePool
@@ -8,7 +9,6 @@ from db_connection.connection_pools import ReadOnlyPool, ReadWritePool
 def main():
     """Interact with user"""
 
-    # Create connection pools
     read_only_pool = ReadOnlyPool(**USER_CREDENTIALS)
     read_write_pool = ReadWritePool(**USER_CREDENTIALS)
 
@@ -21,7 +21,7 @@ def main():
         cursor.execute('SELECT * FROM users')
         table = cursor.fetchall()
         for row in table:
-            print(row)
+            logging.info(row)
 
 
 if __name__ == '__main__':
