@@ -4,6 +4,7 @@ import time
 import typing
 from collections import deque
 from contextlib import contextmanager
+from threading import Lock
 
 import psycopg2
 
@@ -14,7 +15,7 @@ class PoolBaseClass:
 
     """Base class for creating connection pools"""
 
-    def __init__(self,
+    def __init__(self, # pylint: disable=too-many-arguments
                 hostname: str,
                 database_name: str,
                 username: str,
@@ -29,6 +30,7 @@ class PoolBaseClass:
         self.password = password
         self.pool_size = pool_size
         self._pool = deque()
+        self._lock = Lock()
 
     def create_connection(self) -> psycopg2.connect:
         """Create connection and add it to the pool"""
@@ -54,7 +56,8 @@ class PoolBaseClass:
         # Create and return connection
         # If the count is less than the pool max size
         if self.pool_size > 0:
-            return self.create_connection()
+            new_connection = self.create_connection()
+            self._pool.append(new_connection)
 
         # If there are no connections in the pool, wait until one is returned
         while not self._pool:
@@ -63,8 +66,9 @@ class PoolBaseClass:
             time.sleep(1)
 
         # Get connection from pool and log it is successful
-        logging.info('A free connection is pulled from the pool!')
-        return self._pool.popleft()
+        with self._lock:
+            logging.info('A free connection is pulled from the pool!')
+            return self._pool.popleft()
 
     def return_connection(self, connection: psycopg2.connect) -> None:
         """Return connection to the pool"""
