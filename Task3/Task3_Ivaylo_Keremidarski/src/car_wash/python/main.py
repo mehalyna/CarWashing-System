@@ -1,6 +1,6 @@
 import sys
 import logging
-from connection.pool import ro_pool, rw_pool
+from car_wash.python.pool import ro_pool, rw_pool
 
 
 def main():
@@ -17,16 +17,16 @@ def main():
     """Insert data into carwashes table"""
     with rw_pool as cur:
         cur.execute(
-            "INSERT INTO carwashes (carwash_name, carwash_address, quantity_of_places) "
+            "INSERT INTO car_washes (car_wash_name, car_wash_address, quantity_of_places) "
             "VALUES (%s, %s, %s)",
             ("carwash1", "address1", 1),
         )
 
     """Print all the rows from carwashes table"""
     with ro_pool as cur:
-        cur.execute("SELECT * FROM carwashes;")
+        cur.execute("SELECT * FROM car_washes;")
         for row in cur.fetchall():
-            print(row)
+            logging.info(row)
 
 
 if __name__ == "__main__":
