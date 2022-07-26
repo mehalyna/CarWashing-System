@@ -15,8 +15,6 @@ You can specify the number of connections you want to have in a pool
 
 Check /src/python/car_wash/main.py to see how to use a pool as a context manager
 
-You can run 'python3 pool.py -h' see how to parse parameters from console
-
 Configure your connection data to your db in /src/python/car_wash/config.py
 
-To see the logs open pool.log
+![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/PyCQA/pylint)
