@@ -2,7 +2,7 @@
 import logging
 import sys
 
-from psycopg2 import cursor
+import psycopg2
 from src.python.carwash.DB_connections.dbpoolmanager import ro_db_pool, rw_db_pool
 
 
@@ -16,18 +16,16 @@ INSERT_QUERY = 'INSERT INTO users (user_id, phone_number, full_name, user_locati
 
 def main():
     """Using the ReadWrite pool, insert data into Users table"""
-    conRW = rw_db_pool.connection() 
-    with conRW as cursor:
+    with rw_db_pool.connection() as cursor:
         cursor.execute(INSERT_QUERY)
 
         logging.info("Query inserted.")
 
     """Using the ReadOnly pool, view the table data from users table"""
-    conRO = ro_db_pool.connection()
-    with conRO as cursor:
+    with ro_db_pool.connection() as cursor:
         cursor.execute(SELECT_QUERY)
 
-        for r in cursor.fetchall():
+        for value in cursor.fetchall():
             logging.info(r)
 
 
