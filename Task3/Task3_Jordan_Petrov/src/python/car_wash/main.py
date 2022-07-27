@@ -5,13 +5,8 @@ from car_wash.dbpool import ro_db_pool, rw_db_pool
 
 
 def main():
-    root = logging.getLogger()
-    root.setLevel(logging.DEBUG)
-    handler = logging.StreamHandler(sys.stdout)
-    handler.setLevel(logging.DEBUG)
-    formatter = logging.Formatter("%(asctime)s - %(message)s")
-    handler.setFormatter(formatter)
-    root.addHandler(handler)
+    logging.basicConfig(stream=sys.stdout, level=logging.INFO, format='%(asctime)s - %(message)s')
+    log = logging.getLogger('db_pool')
 
     """Insert data into carwashes table"""
     with rw_db_pool.transaction() as cur:
@@ -20,11 +15,10 @@ def main():
 
     """Print all the rows from carwashes table"""
     with ro_db_pool.connection() as cur:
-        cur.execute('SELECT * FROM carwashasdasdes;')
+        cur.execute('SELECT * FROM carwashes;')
         for row in cur.fetchall():
-            logging.info(row)
+            log.info(row)
 
 
 if __name__ == '__main__':
-    main()
-    sys.exit(main)
+    sys.exit(main())
