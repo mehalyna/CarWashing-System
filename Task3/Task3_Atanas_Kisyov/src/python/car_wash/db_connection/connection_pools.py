@@ -53,22 +53,23 @@ class PoolBaseClass:
     def get_connection(self) -> psycopg2.connect:
         """Get connection from the pool"""
 
-        # Create and return connection
-        # If the count is less than the pool max size
-        if self.pool_size > 0:
-            new_connection = self.create_connection()
-            self._pool.append(new_connection)
+        connection = None
 
-        # If there are no connections in the pool, wait until one is returned
-        while not self._pool:
-            logging.error('There are no free connections at the moment. \
-                Please wait for free connection...')
-            time.sleep(1)
+        while not connection:
+            with self._lock:
 
-        # Get connection from pool and log it is successful
-        with self._lock:
-            logging.info('A free connection is pulled from the pool!')
-            return self._pool.popleft()
+                if self.pool_size > 0:
+                    connection = self.create_connection()
+                    continue
+
+                if self._pool:
+                    connection = self._pool.popleft()
+                    continue
+
+                logging.error('There are no free connections, please wait!')
+                time.sleep(0.1)
+        
+        return connection
 
     def return_connection(self, connection: psycopg2.connect) -> None:
         """Return connection to the pool"""
