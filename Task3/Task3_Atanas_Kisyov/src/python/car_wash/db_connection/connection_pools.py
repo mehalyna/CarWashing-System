@@ -68,7 +68,7 @@ class PoolBaseClass:
 
                 logging.error('There are no free connections, please wait!')
                 time.sleep(0.1)
-        
+
         return connection
 
     def return_connection(self, connection: psycopg2.connect) -> None:
@@ -76,29 +76,6 @@ class PoolBaseClass:
 
         self._pool.append(connection)
         logging.info('Connection has been successfully returned to the pool!')
-
-
-class ReadOnlyPool(PoolBaseClass, metaclass=Singleton):
-
-    """Read-only connection pool"""
-
-    @contextmanager
-    def connection(self) -> typing.Generator:
-        """
-        Get database connection from pool, yield it, and
-        return it to the pool after it's no longer used
-        """
-
-        open_connection = self.get_connection()
-        try:
-            yield open_connection
-        finally:
-            self.return_connection(open_connection)
-
-
-class ReadWritePool(PoolBaseClass, metaclass=Singleton):
-
-    """Read/Write connection pool"""
 
     @contextmanager
     def connection(self) -> typing.Generator:
@@ -111,5 +88,16 @@ class ReadWritePool(PoolBaseClass, metaclass=Singleton):
         try:
             yield open_connection
         finally:
-            open_connection.commit()
+            if self.__class__.__name__ == 'ReadWritePool':
+                open_connection.commit()
             self.return_connection(open_connection)
+
+
+class ReadOnlyPool(PoolBaseClass, metaclass=Singleton):
+
+    """Read-only connection pool"""
+
+
+class ReadWritePool(PoolBaseClass, metaclass=Singleton):
+
+    """Read/Write connection pool"""
