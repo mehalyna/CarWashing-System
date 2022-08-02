@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'car_washes',
     'order_details.apps.OrderDetailsConfig',
+    'carwash_places',
     'users',
+
 ]
 
 MIDDLEWARE = [
