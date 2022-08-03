@@ -1,6 +1,7 @@
 from django.db import models
 
 # Create your models here.
+
 class CarwashPlaces(models.Model):
 
     place_id = models.CharField(
@@ -10,3 +11,4 @@ class CarwashPlaces(models.Model):
     place_name = models.CharField(
         max_length=50
     )
+
