@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'order_details.apps.OrderDetailsConfig',
     'carwash_places',
     'users',
+    'CW_places',
 
 ]
 
