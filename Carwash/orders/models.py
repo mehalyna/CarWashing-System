@@ -8,12 +8,12 @@ class Order(models.Model):
 
     ORDER_CURRENT_STATUS_MAX_LENGTH = 20
 
-    car_wash_id = models.ForeignKey(
+    car_wash = models.ForeignKey(
         CarWashes,
         on_delete=models.CASCADE,
         )
 
-    user_id = models.ForeignKey(
+    user = models.ForeignKey(
         Users,
         on_delete=models.CASCADE,
     )
