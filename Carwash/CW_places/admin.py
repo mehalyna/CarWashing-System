@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from Carwash import CW_places
+
+admin.site.register(CW_places)
