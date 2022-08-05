@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'car_washes',
     'order_details.apps.OrderDetailsConfig',
+    'places',
     'orders',
     'carwash_places',
     'users',
