@@ -8,8 +8,8 @@ from services.models import Service
 
 
 class OrderDetail(models.Model):
+    order = models.OneToOneField(Order, on_delete=models.CASCADE)
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
     carwash_place = models.ForeignKey(CarwashPlaces, on_delete=models.CASCADE)
     price = models.FloatField(blank=True, null=True)
     duration = models.IntegerField(blank=True, null=True)
