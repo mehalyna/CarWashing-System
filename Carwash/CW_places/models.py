@@ -1,6 +1,6 @@
 from django.db import models
 
-# from Carwash.car_washes.models import CarWashes
+from Carwash.car_washes.models import CarWashes
 
 
 class CWPlaces(models.Model):
