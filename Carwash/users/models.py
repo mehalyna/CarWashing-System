@@ -19,7 +19,7 @@ class Accounts(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
 
-    object = AccountsManager()
+    objects = AccountsManager()
 
 
 class Users(models.Model):
