@@ -1,0 +1,10 @@
+\c carwash
+\i /home/svetoslav/Desktop/db/carwash/shema/table_car_wash.sql
+\i /home/svetoslav/Desktop/db/carwash/shema/table_services.sql
+\i /home/svetoslav/Desktop/db/carwash/shema/table_carwash_services.sql
+\i /home/svetoslav/Desktop/db/carwash/shema/table_places.sql
+\i /home/svetoslav/Desktop/db/carwash/shema/table_carwash_places.sql
+\i /home/svetoslav/Desktop/db/carwash/shema/table_users.sql
+\i /home/svetoslav/Desktop/db/carwash/shema/table_accounts.sql
+\i /home/svetoslav/Desktop/db/carwash/shema/table_orders.sql
+\i /home/svetoslav/Desktop/db/carwash/shema/table_order_details.sql
