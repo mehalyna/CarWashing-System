@@ -29,4 +29,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('car_washes.urls')),
     path('', include('users.urls')),
+    path('', include('orders.urls')),
 ]
