@@ -1,10 +1,15 @@
-from rest_framework import viewsets, permissions
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 
 from users.models import Users
 from users.serializers import UsersSerializer
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class UsersList(ListCreateAPIView):
     queryset = Users.objects.all()
     serializer_class = UsersSerializer
-    permission_classes = [permissions.IsAuthenticated]
+
+
+class UserDetails(RetrieveUpdateDestroyAPIView):
+    queryset = Users.objects.all()
+    serializer_class = UsersSerializer
+    lookup_url_kwarg = 'pk'
