@@ -12,6 +12,3 @@ class OrderDetailViewSet(viewsets.ModelViewSet):
     queryset = OrderDetail.objects.all().order_by('order')
     serializer_class = OrderDetailSerializer
     permission_classes = [permissions.IsAuthenticated]
-
-    def perform_create(self, serializer):
-        serializer.save()
