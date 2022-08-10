@@ -9,4 +9,3 @@ class CarWashesListView(views.ListView):
     ordering = ('car_wash_name',)
     context_object_name = 'car_washes'
     template_name = 'car_washes/car_washes_list.html'
-
