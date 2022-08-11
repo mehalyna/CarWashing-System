@@ -19,3 +19,8 @@ class OrderDetail(models.Model):
         managed = True
         db_table = 'order_detail'
         unique_together = (('service', 'order'),)
+
+    def __str__(self):
+        return f'order:{self.order}, service: {self.service}\
+                , place:{self.carwash_place}, price:{self.price}\
+                , duration:{self.duration}, start time:{self.start_time}'
