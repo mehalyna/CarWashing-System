@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
+DEFAULT_APPS = [
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+]
+
+CUSTOM_APPS = [
     'car_washes',
     'order_details.apps.OrderDetailsConfig',
     'places',
@@ -47,8 +50,9 @@ INSTALLED_APPS = [
     'users',
     'services',
     'CW_places',
-
 ]
+
+INSTALLED_APPS = DEFAULT_APPS + CUSTOM_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
