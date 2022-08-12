@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from CW_places.models import CWPlaces
+
+admin.site.register(CWPlaces)
