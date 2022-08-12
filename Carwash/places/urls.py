@@ -1,6 +1,6 @@
 from django.urls import path
-from places.views import place_name_view
+from places.views import PlacesView
 
 urlpatterns = (
-    path('places/', place_name_view, name='places')
+    path('places/', PlacesView.as_view({'get': 'list'}), name='places'),
 )

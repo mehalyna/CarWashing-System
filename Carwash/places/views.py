@@ -1,6 +1,8 @@
-from urllib import request
-from django.shortcuts import render
+from rest_framework import viewsets
+from places.models import Places
+from places.serializers import PlacesSerializer
 
-# Create your views here.
-def place_name_view(request):
-    return render(request)
+
+class PlacesView(viewsets.ModelViewSet):
+    queryset = Places.objects.all()
+    serializer_class = PlacesSerializer
