@@ -1,8 +1,11 @@
-from django.urls import path
+from django.urls import path, include
 
-from car_washes.api_views import CarWashesCreate
-from car_washes.views import CarWashesListView
+from rest_framework import routers
 
+from car_washes.views import CarWashSet
+
+router = routers.DefaultRouter()
+router.register(r'car_washes', CarWashSet)
 urlpatterns = (
-    path('car_washes/', CarWashesCreate.as_view(), name='api car wash create'),
+    path('', include(router.urls)),
 )
