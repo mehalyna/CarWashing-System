@@ -1,6 +1,11 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework import routers
 from places.views import PlacesView
 
+
+router = routers.DefaultRouter()
+router.register(r'places', PlacesView)
+
 urlpatterns = (
-    path('places/', PlacesView.as_view({'get': 'list'}), name='places'),
+    path('', include(router.urls)),
 )
