@@ -21,6 +21,12 @@ class Accounts(AbstractBaseUser, PermissionsMixin):
 
     objects = AccountsManager()
 
+    def __str__(self):
+        return f'Email: {self.email}, ' \
+               f'is_superuser: {self.is_superuser}, ' \
+               f'is_staff: {self.is_staff}, ' \
+               f'is_active: {self.is_active}'
+
 
 class Users(models.Model):
     phone_number = models.CharField(
@@ -43,3 +49,9 @@ class Users(models.Model):
         on_delete=models.CASCADE,
         primary_key=True,
     )
+
+    def __str__(self):
+        return f'Phone Number: {self.phone_number}, ' \
+               f'Full Name: {self.full_name}, ' \
+               f'User Location: {self.user_location}, ' \
+               f'Account id: {self.account.id}'
