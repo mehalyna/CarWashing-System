@@ -22,10 +22,7 @@ class Accounts(AbstractBaseUser, PermissionsMixin):
     objects = AccountsManager()
 
     def __str__(self):
-        return f'Email: {self.email}, ' \
-               f'is_superuser: {self.is_superuser}, ' \
-               f'is_staff: {self.is_staff}, ' \
-               f'is_active: {self.is_active}'
+        return self.email
 
 
 class Users(models.Model):
