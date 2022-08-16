@@ -3,12 +3,12 @@ from django.db import models
 from django.utils import timezone
 
 from orders.models import Order
-from carwash_places.models import CarwashPlaces
+from CW_places.models import CWPlaces
 
 
 class OrderDetail(models.Model):
     order = models.OneToOneField(Order, on_delete=models.CASCADE)
-    carwash_place = models.ForeignKey(CarwashPlaces, on_delete=models.CASCADE)
+    carwash_place = models.ForeignKey(CWPlaces, on_delete=models.CASCADE)
     price = models.FloatField(blank=True, null=True)
     duration = models.IntegerField(blank=True, null=True)
     start_time = models.TimeField(blank=True, null=True)

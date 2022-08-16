@@ -47,7 +47,6 @@ CUSTOM_APPS = [
     'order_details.apps.OrderDetailsConfig',
     'places',
     'orders',
-    'carwash_places',
     'users',
     'CW_places',
 ]
