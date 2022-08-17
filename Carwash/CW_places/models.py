@@ -1,4 +1,5 @@
 from django.db import models
+
 from car_washes.models import CarWashes
 from places.models import Places
 
@@ -10,4 +11,6 @@ class CWPlaces(models.Model):
     is_free = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.carwash_place_id, self.is_free
+        return f'Carwash Id -> {self.carwash_place}, free -> {self.is_free}'
+
+
