@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 
 DEFAULT_APPS = [
     'rest_framework',
+    'rest_framework_simplejwt',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,13 +47,17 @@ CUSTOM_APPS = [
     'order_details.apps.OrderDetailsConfig',
     'places',
     'orders',
-    'carwash_places',
     'users',
-    'services',
     'CW_places',
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + CUSTOM_APPS
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -91,11 +96,12 @@ WSGI_APPLICATION = 'Carwash.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('HOST'),
-        'PORT': os.getenv('PORT'),
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'test37',
+        'HOST':  os.getenv("POSTGRES_HOST", "localhost"),
+        'PORT': '5432',
+        'ATOMIC_REQUESTS': True
     }
 }
 
@@ -148,5 +154,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    'DEFAULT_AUTHENTICATION_CLASSES':(
+        'rest_framework_simplejwt.authentication.JWTAuthentication'
+    )
 }
