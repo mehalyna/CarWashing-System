@@ -5,4 +5,4 @@ from rest_framework import serializers
 class CWPlacesSerializer(serializers.ModelSerializer):
     class Meta:
         model = CWPlaces
-        fields = '__all_'
+        fields = '__all__'
