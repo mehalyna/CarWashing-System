@@ -5,6 +5,6 @@ from car_washes.serializers import CarWashesSerializer
 
 
 class CarWashSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = CarWashes.objects.all()
     serializer_class = CarWashesSerializer
