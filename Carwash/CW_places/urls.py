@@ -7,5 +7,6 @@ router = routers.DefaultRouter()
 router.register(r'cw_places', CWPlacesView)
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('api/', include(router.urls)),
+
 ]

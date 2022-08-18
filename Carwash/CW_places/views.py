@@ -6,4 +6,4 @@ from CW_places.models import CWPlaces
 class CWPlacesView(viewsets.ModelViewSet):
     queryset = CWPlaces.objects.all()
     serializer_class = CWPlacesSerializer
-    permission = ()
+
