@@ -5,12 +5,9 @@ from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from car_washes.models import CarWashes
-from car_washes.serializers import CarWashesSerializer
 from car_washes.tests.factories import CarWashesFactory
 
 from users.models import Users
-
 
 user_model = get_user_model()
 
