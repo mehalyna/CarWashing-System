@@ -6,24 +6,26 @@ from orders.models import Order
 from users.models import Accounts, Users
 
 
-class AccountFactory(factory.Factory):
+class AccountFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Accounts
-    
+        django_get_or_create = ('email',)
+
     email = 'arthur.dent@the-guide.com'
-    is_staff = False
+    password = '424242'
 
 
-class UserFactory(factory.Factory):
+class UserFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Users
-
-    phone_number = '+359-897-111-222'
+        django_get_or_create = ('phone_number',)
+    
+    phone_number = '4242424242'
     full_name = 'Arthur Dent'
     user_location = 'Earth'
-    account = AccountFactory()
+    account = factory.SubFactory(AccountFactory)
 
 
 class CarWashFactory(factory.django.DjangoModelFactory):
@@ -40,9 +42,10 @@ class OrderFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Order
+        django_get_or_create = ('user', 'car_wash')
     
-    car_wash = CarWashFactory()
-    user = UserFactory()
+    car_wash = factory.SubFactory(CarWashFactory)
+    user = factory.SubFactory(UserFactory)
     order_current_status = 'New'
     order_date_time = datetime.datetime.now()
     execution = datetime.datetime.now()
