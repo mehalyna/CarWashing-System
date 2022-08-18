@@ -19,6 +19,6 @@ class OrderDetail(models.Model):
         unique_together = ('order',)
 
     def __str__(self):
-        return f'order:{self.order} \
-                , place:{self.carwash_place}, price:{self.price}\
-                , duration:{self.duration}, start time:{self.start_time}'
+        return f'order:{self.order}, service: {self.service} '\
+               f'place:{self.carwash_place}, price:{self.price} '\
+               f'duration:{self.duration}, start time:{self.start_time}'
