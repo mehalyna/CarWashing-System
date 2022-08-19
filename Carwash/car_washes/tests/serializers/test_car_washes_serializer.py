@@ -1,6 +1,5 @@
 from django.test import TestCase
 
-from car_washes.models import CarWashes
 from car_washes.tests.factories import CarWashesFactory
 from car_washes.serializers import CarWashesSerializer
 
