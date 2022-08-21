@@ -5,6 +5,11 @@ from users.models import Users
 
 
 class Order(models.Model):
+    """
+    Model to store orders. 
+    Foreign key to CarWashes model.
+    Foreign key to Users model.
+    """
 
     ORDER_CURRENT_STATUS_MAX_LENGTH = 20
 
@@ -31,4 +36,5 @@ class Order(models.Model):
     )
 
     def __str__(self):
-        return f'Order Date: {self.order_date_time}, Status: {self.order_current_status}'
+        return f'Order Date: {self.order_date_time}, '\
+               f'Status: {self.order_current_status}'
