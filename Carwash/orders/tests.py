@@ -1,32 +1,47 @@
-from django.test import TestCase
-from django.urls import reverse
+from rest_framework.test import APITestCase
 
-from orders.factories import UserFactory, CarWashFactory, OrderFactory
+from orders import factories
 from orders.models import Order
 
-class TestOrders(TestCase):
+
+class TestOrders(APITestCase):
+    """
+    Test CRUD operations on Order model.
+    """
 
     def setUp(self) -> None:
-        self.user = UserFactory
-        self.car_wash = CarWashFactory
-        self.order = OrderFactory
-        return super().setUp()
+        """Create and save test instances with random values"""
 
-    def test_proper_connection(self):
-        user = {
-            'phone_number': self.user.phone_number,
-            'full_name': self.user.full_name,
-            'user_location': self.user.user_location,
-            'account': self.user.account,
-        }
-        data = {
-            'car_wash': self.order.car_wash,
-            'user': self.order.user,
-            'order_current_status': self.order.order_current_status,
-            'execution': self.order.execution,
-        }
-        user_response = self.client.post('127.0.0.1:8000', data=user)
-        data_response = self.client.post(reverse('orders'), data=data)
-        order = Order.objects.all()
-        print(user_response)
-        print(data_response.status_code)
+        self.account = factories.AccountFactory.create()
+        self.user = factories.UserFactory.create()
+        self.car_wash = factories.CarWashFactory.create()
+        self.order = factories.OrderFactory.create()
+        
+    def test_successful_create_data(self):
+        """Test if object is created and saved"""
+
+        data = Order.objects.all()
+        self.assertIsNotNone(data)
+    
+    def test_successful_delete_data(self):
+        """Test if object is deleted"""
+
+        instance = Order.objects.first()
+        instance.delete()
+        instance = Order.objects.all()
+        self.assertEquals(len(instance), 0)
+
+    def test_successful_update_data(self):
+        """Test if object is updated"""
+
+        new_order_status = 'Changed Status'
+        instance = Order.objects.first()
+        self.assertTrue(instance.order_current_status.startswith('New'))
+
+        instance.order_current_status = new_order_status
+        instance.save()
+
+        changed_instance = Order.objects.get(pk=instance.pk)
+
+        actual = changed_instance.order_current_status
+        self.assertEqual(new_order_status, actual)
