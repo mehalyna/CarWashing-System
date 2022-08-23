@@ -82,6 +82,9 @@ class OrderFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory(
         UserFactory,
     )
-    order_current_status = Order.ORDER_CURRENT_STATUS_MAX_LENGTH
+    order_current_status = factory.fuzzy.FuzzyText(
+        length=Order.ORDER_CURRENT_STATUS_MAX_LENGTH - 3,
+        prefix='New',
+    )
     order_date_time = datetime.datetime.now()
     execution = datetime.datetime.now()
