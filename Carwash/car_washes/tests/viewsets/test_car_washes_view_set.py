@@ -1,45 +1,49 @@
+import json
+
 from django.urls import reverse
-from django.test import Client
+from django.contrib.auth import get_user_model
 
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from car_washes.models import CarWashes
-from car_washes.serializers import CarWashesSerializer
 from car_washes.tests.factories import CarWashesFactory
 
-from users.tests.factories import UsersFactory
-from users.models import Users
+user_model = get_user_model()
 
 
 class CarWashesViewSetTests(APITestCase):
     def setUp(self):
-        self.client = Client()
-        self.car_wash = CarWashesFactory
-        # self.user = Users.objects.create(
-        #     phone_number='1231412',
-        #     full_name='some full name',
+        self.car_wash = CarWashesFactory()
+        user = user_model.objects.create(email='testing@mail.com', password='123456')
+        self.client.force_authenticate(user)
 
-        # )
-        # self.client.login(email=self.user.email, password='adm1n')
-    # def test_unauthorized_user(self):
-    #     self.client.logout()
-    #     url = reverse('users-list')
-    #     response = self.client.get(url, format='json')
-    #     self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    # def test_authorized_user(self):
-    #     url = reverse('users-list')
-    #     serializers = UsersSerializer(instance=Users.objects.all(), many=True)
-    #     response = self.client.get(url, format='json')
-
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
-    #     self.assertEqual(response.json(), serializers.data)
-
-    # def test_create_car_wash__when_all_fileds_are_valid__expect_success(self):
-    #     self.client.post(url)
-
-    def test_get_car_wash(self):
+    def test_get_car_wash__when_user_is_authenticated__expect_200(self):
         url = reverse('carwashes-list')
-        response = self.client.get(url, {'_id': 1})
+        response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_car_wash__when_user_is_not_authenticated__except_401(self):
+        url = reverse('carwashes-list')
+        self.client.logout()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+    
+    def test_post_car_washes__when_user_is_authenticated__expect_201(self):
+        url = reverse('carwashes-list')
+        response = self.client.post(url, self.car_wash.__dict__)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_put_car_washes__when_user_is_authenticated__expect_200(self):
+        url = reverse('carwashes-detail', kwargs={'pk': self.car_wash.pk})
+        data = {
+            'car_wash_name': 'edited name',
+            'car_wash_address': 'edited address',
+            'quantity_of_places': 12,
+        }
+        response = self.client.put(url, data=json.dumps(data), content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_delete_car_washes__when_user_is_authenticated__expect_204(self):
+        url = reverse('carwashes-detail', kwargs={'pk': self.car_wash.pk})
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from car_washes.models import CarWashes
+
+admin.site.register(CarWashes)
