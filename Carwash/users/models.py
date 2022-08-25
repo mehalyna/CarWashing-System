@@ -8,6 +8,7 @@ class Accounts(AbstractBaseUser, PermissionsMixin):
     """
     Users will authenticate with email and password.
     """
+
     email = models.EmailField(
         unique=True,
         null=False
@@ -26,6 +27,10 @@ class Accounts(AbstractBaseUser, PermissionsMixin):
 
 
 class Users(models.Model):
+    """
+    Every User is connected with an account.
+    """
+
     phone_number = models.CharField(
         max_length=15,
         unique=True,
