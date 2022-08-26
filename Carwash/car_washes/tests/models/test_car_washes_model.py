@@ -4,7 +4,9 @@ from car_washes.tests.factories import CarWashesFactory
 
 
 class CarWashesModelTests(TestCase):
-
+    """
+    Testing creation and str method for the Car Wash model
+    """
     def setUp(self):
         self.car_wash = CarWashesFactory()
 
