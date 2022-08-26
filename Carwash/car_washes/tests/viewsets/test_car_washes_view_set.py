@@ -12,6 +12,9 @@ user_model = get_user_model()
 
 
 class CarWashesViewSetTests(APITestCase):
+    """
+    Testing Authentication and CRUD for Car Wash ViewSet
+    """
     def setUp(self):
         self.car_wash = CarWashesFactory()
         user = user_model.objects.create(email='testing@mail.com', password='123456')
