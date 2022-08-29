@@ -27,35 +27,6 @@ class TestOrders(APITestCase):
         }
         self.order_url = 'http://127.0.0.1:8000/orders/'
 
-    def test_successful_create_data(self):
-        """Test if object is created and saved"""
-
-        data = Order.objects.all()
-        self.assertIsNotNone(data)
-    
-    def test_successful_delete_data(self):
-        """Test if object is deleted"""
-
-        instance = Order.objects.first()
-        instance.delete()
-        instance = Order.objects.all()
-        self.assertEquals(len(instance), 0)
-
-    def test_successful_update_data(self):
-        """Test if object is updated"""
-
-        new_order_status = 'Changed Status'
-        instance = Order.objects.first()
-        self.assertTrue(instance.order_current_status.startswith('New'))
-
-        instance.order_current_status = new_order_status
-        instance.save()
-
-        changed_instance = Order.objects.get(pk=instance.pk)
-
-        actual = changed_instance.order_current_status
-        self.assertEqual(new_order_status, actual)
-
     def test_successful_post_request(self):
         """Test if object is successfully posted"""
 
@@ -104,11 +75,7 @@ class TestOrders(APITestCase):
             self.order_object,
         )
 
-        response = self.client.get(
-            f'{self.order_url}{posted_object_id}/',
-        )
-
-        actual = changed_object.json()['order_current_status']
+        actual = response.json()['order_current_status']
         expected = self.order_object['order_current_status']
 
         self.assertEqual(
@@ -130,7 +97,7 @@ class TestOrders(APITestCase):
             f'{self.order_url}{posted_object_id}/',
         )
 
-        actual = delete.status_code
+        actual = response.status_code
         expected = 204
 
         self.assertEqual(
