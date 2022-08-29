@@ -99,7 +99,7 @@ class TestOrders(APITestCase):
         posted_object_id = post.json()['id']
         self.order_object['order_current_status'] = 'Changed'
         
-        self.client.put(
+        response = self.client.put(
             f'{self.order_url}{posted_object_id}/',
             self.order_object,
         )
