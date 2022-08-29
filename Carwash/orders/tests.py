@@ -126,7 +126,7 @@ class TestOrders(APITestCase):
 
         posted_object_id = post.json()['id']
 
-        delete = self.client.delete(
+        response = self.client.delete(
             f'{self.order_url}{posted_object_id}/',
         )
 
