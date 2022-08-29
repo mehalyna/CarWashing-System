@@ -104,7 +104,7 @@ class TestOrders(APITestCase):
             self.order_object,
         )
 
-        changed_object = self.client.get(
+        response = self.client.get(
             f'{self.order_url}{posted_object_id}/',
         )
 
