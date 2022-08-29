@@ -146,3 +146,25 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
+
+CELERY_BROKER_URL = "redis://redis:6379"
+CELERY_RESULT_BACKEND = "redis://redis:6379"
+
+CELERY_BEAT_SCHEDULE = {
+    "<name of task>": {
+
+        '''
+        'Path to task' must be a string and start with 
+        Carwash.<folder/folders to the task>.<name of method of the task> 
+        '''
+
+        "task": "<path to task>",
+
+        '''
+        Import datetime and use crontab, set the time for repeat
+        '''
+
+        "schedule": crontab(minute="*/1"),
+    },
+}
+
