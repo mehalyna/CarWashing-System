@@ -33,7 +33,7 @@ class OrderView(ModelViewSet):
     serializer_class = OrderSerializer
 
     def _alter_user_information(self, data: serializer_class) -> dict:
-        """Add full user information to related order"""
+        """Returns full user information"""
 
         user_pk = data.data['user']
         user = Users.objects.get(pk=user_pk)
@@ -48,7 +48,7 @@ class OrderView(ModelViewSet):
         }
 
     def _alter_car_wash_information(self, data: serializer_class) -> dict:
-        """Add full car wash information to related order"""
+        """Returns full car wash information"""
 
         car_wash_pk = data.data['car_wash']
         car_wash = CarWashes.objects.get(pk=car_wash_pk)
