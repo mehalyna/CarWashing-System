@@ -1,0 +1,72 @@
+version: "3.8"
+
+volumes:
+  pgdata:
+
+services:
+
+  # Redis
+  redis:
+    image: redis:6.0.16
+    container_name: redis
+    ports:
+      - 6379:6379
+
+  # Postgres Database
+  postgres:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: test37
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  # Django Application
+  carwash:
+    build: .
+    volumes:
+      - ./Carwash:/usr/src/app/Carwash
+    working_dir: /usr/src/app/Carwash
+    ports:
+      - 8000:8000
+    container_name: carwash_container
+    command: python manage.py runserver 0.0.0.0:8000
+    environment:
+      - DEBUG=1
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1
+      - POSTGRES_HOST=postgres
+      - CELERY_BROKER=redis://redis:6379/1
+    depends_on:
+      - postgres
+      - redis
+
+  # Celery
+  celery_worker:
+    build: .
+    volumes:
+      - ./Carwash:/usr/src/app/Carwash
+    container_name: celery_container
+    command: celery --version
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/1
+    depends_on:
+      - redis
+      - postgres
+      - carwash
+
+  # Flower
+  flower:
+    build: .
+    volumes:
+      - ./Carwash:/usr/src/app/Carwash
+    container_name: flower
+    command: celery report
+    ports:
+      - 5555:5555
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    depends_on:
+      - redis
+      - carwash
+      - celery_worker
