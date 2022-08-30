@@ -18,9 +18,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
         request = self.context.get('request')
 
-        if request and request.method =='POST' or request.method == 'PUT':
-            self.Meta.depth = 0
-        else:
+        if request and request.method =='GET':
             self.Meta.depth = 2
             self.Meta.read_only_fields = ('car_wash', 'user')
 
