@@ -27,7 +27,6 @@ services:
     build: .
     volumes:
       - ./Carwash:/usr/src/app/Carwash
-    working_dir: /usr/src/app/Carwash
     ports:
       - 8000:8000
     container_name: carwash_container
