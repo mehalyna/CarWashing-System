@@ -18,7 +18,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
         request = self.context.get('request')
 
-        if request and request.method=='POST':
+        if request and request.method =='POST' or request.method == 'PUT':
             self.Meta.depth = 0
         else:
             self.Meta.depth = 2
