@@ -1,27 +1,17 @@
 from rest_framework import serializers
 
+from car_washes.serializers import CarWashesSerializer
 from orders.models import Order
-
+from users.serializers import UsersSerializer
 
 class OrderSerializer(serializers.ModelSerializer):
     """
     Serializer for Order model.
     """
 
-    def __init__(self, *args, **kwargs):
-        """
-        Initialize instance.
-        Check the request method and set the depth of related tables for JSON response.
-        """
-
-        super().__init__(*args, **kwargs)
-
-        request = self.context.get('request')
-
-        if request and request.method =='GET':
-            self.Meta.depth = 2
-            self.Meta.read_only_fields = ('car_wash', 'user')
+    user_serializer = UsersSerializer(read_only=True, source='user')
+    car_wash_serializer = CarWashesSerializer(read_only=True, source='car_wash')
 
     class Meta:
         model = Order
-        fields = '__all__'
+        fields ='__all__'
