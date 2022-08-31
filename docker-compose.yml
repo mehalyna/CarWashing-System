@@ -7,3 +7,42 @@ services:
     environment:
       - POSTGRES_PASSWORD=test37
     command: postgres
+
+  app:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./Carwash:/Carwash
+    command: >
+      sh -c "python manage.py wait_for_db &&
+             python manage.py runserver 0.0.0.0:8000"
+    environment:
+      - POSTGRES_HOST=db
+
+    depends_on:
+      - db
+
+  redis:
+    image: redis:alpine
+
+  celery:
+    restart: always
+    build:
+      context: .
+    command: celery -A car_wash worker -l INFO
+    volumes:
+      - ./Carwash:/Carwash
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=test37
+      - POSTGRES_NAME=postgres
+    depends_on:
+      - db
+      - redis
+      - app
+
+volumes:
+  pgdata:
