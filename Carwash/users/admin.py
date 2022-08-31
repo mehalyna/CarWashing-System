@@ -21,8 +21,10 @@ def make_staff(model, request, queryset):
 
 @admin.action(description='Make selected accounts regular')
 def make_regular(model, request, queryset):
-    queryset.update(is_staff=False)
-    queryset.update(is_superuser=False)
+    queryset.update(
+        is_superuser=False,
+        is_staff=False
+    )
     show_message(model, request, 'Superuser and staff statuses were successfully changed.')
 
 
