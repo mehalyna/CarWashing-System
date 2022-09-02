@@ -26,12 +26,16 @@ services:
 
   redis:
     image: redis:alpine
+    ports:
+      - "6379:6379"
 
   celery:
     restart: always
     build:
       context: .
-    command: celery -A car_wash worker -l INFO
+#    command: pip install "celery[redis]" && celery -A Carwash.celery worker -l INFO
+#    command: tail -f /Carwash/manage.py
+    command: celery -A Carwash.celery worker -l INFO
     volumes:
       - ./Carwash:/Carwash
     environment:
@@ -43,6 +47,19 @@ services:
       - db
       - redis
       - app
+
+  flower:
+    build: .
+    command: celery -A Carwash.celery flower --loglevel=INFO
+    ports:
+      - "5556:5555"
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - app
+      - redis
+      - celery
 
 volumes:
   pgdata:
