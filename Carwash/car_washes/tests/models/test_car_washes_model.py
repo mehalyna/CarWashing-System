@@ -7,7 +7,9 @@ class CarWashesModelTests(TestCase):
     """
     Testing creation and str method for the Car Wash model
     """
+
     def setUp(self):
+        """Setting up factory to generate data for Car Wash object"""
         self.car_wash = CarWashesFactory()
 
     def test_car_washes_create__when_fields_are_valid__expect_success(self):

@@ -52,7 +52,7 @@ services:
     build: .
     command: celery -A Carwash.celery flower --loglevel=INFO
     ports:
-      - "5556:5555"
+      - "5555:5555"
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0

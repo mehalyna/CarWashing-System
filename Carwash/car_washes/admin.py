@@ -5,6 +5,10 @@ from car_washes.tasks import set_car_wash_quantity_to_0
 
 
 class CarWashAdmin(admin.ModelAdmin):
+    """
+    Administration for CarWash model providing all the fields from model
+    and adding admin action to set quantity of places to 0
+    """
     model = CarWashes
     list_display = ('id', 'car_wash_name', 'car_wash_address', 'quantity_of_places')
     list_display_links = ('id', 'car_wash_name')
@@ -13,6 +17,7 @@ class CarWashAdmin(admin.ModelAdmin):
     actions = ('make_quantity_0',)
 
     def make_quantity_0(self, request, queryset):
+        """Admin action to set quantity of places to 0"""
         for car_wash in queryset:
             set_car_wash_quantity_to_0.delay(car_wash.id)
 

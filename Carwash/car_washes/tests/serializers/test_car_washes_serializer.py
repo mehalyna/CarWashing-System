@@ -8,9 +8,11 @@ class CarWashesSerializerTest(TestCase):
     """
     Testing instance data and validation for the Car Wash serializer
     """
+
     def setUp(self):
+        """Setting up factory to generate data for Car Wash object"""
         self.car_wash = CarWashesFactory()
-    
+
     def test_instance_data(self):
         serializer = CarWashesSerializer(
             instance=self.car_wash
@@ -29,7 +31,7 @@ class CarWashesSerializerTest(TestCase):
             serializer.data['quantity_of_places'],
             self.car_wash.quantity_of_places
         )
-    
+
     def test_validation(self):
         car_wash_data = {
             'car_wash_name': 'some name',

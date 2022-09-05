@@ -15,7 +15,10 @@ class CarWashesViewSetTests(APITestCase):
     """
     Testing Authentication and CRUD for Car Wash ViewSet
     """
+
     def setUp(self):
+        """Setting up factory to generate data for Car Wash object
+         and the user needed for the tests"""
         self.car_wash = CarWashesFactory()
         user = user_model.objects.create(email='testing@mail.com', password='123456')
         self.client.force_authenticate(user)
@@ -30,7 +33,7 @@ class CarWashesViewSetTests(APITestCase):
         self.client.logout()
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-    
+
     def test_post_car_washes__when_user_is_authenticated__expect_201(self):
         url = reverse('carwashes-list')
         response = self.client.post(url, self.car_wash.__dict__)

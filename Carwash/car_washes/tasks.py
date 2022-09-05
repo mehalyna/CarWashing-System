@@ -1,10 +1,14 @@
-from celery import shared_task
+import requests
 
-from car_washes.models import CarWashes
+from celery import shared_task
 
 
 @shared_task
 def set_car_wash_quantity_to_0(pk):
-    car_wash = CarWashes.objects.get(pk=pk)
-    car_wash.quantity_of_places = 0
-    car_wash.save()
+    """"
+    Async task to set car wash quantity to 0
+    """
+    requests.put(
+        f'http://127.0.0.1:8000/car_washes/{pk}/',
+        data={'quantity_of_places': 0}
+    )

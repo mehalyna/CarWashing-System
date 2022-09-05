@@ -10,6 +10,7 @@ class CarWashesFactory(factory.django.DjangoModelFactory):
     """
     Car Wash Factory - Django Model Factory for the Car Wash Model
     """
+
     class Meta:
         model = CarWashes
 
