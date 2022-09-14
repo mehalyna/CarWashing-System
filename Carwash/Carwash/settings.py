@@ -184,3 +184,25 @@ SIMPLE_JWT = {
     )
 }
 
+
+CELERY_BROKER_URL = env('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND')
+
+CELERY_BEAT_SCHEDULE = {
+    "<name of task>": {
+
+        '''
+        'Path to task' must be a string and start with 
+        Carwash.<folder/folders to the task>.<name of method of the task> 
+        '''
+
+        "task": "<path to task>",
+
+        '''
+        Import datetime and use crontab, set the time for repeat
+        '''
+
+        "schedule": crontab(minute="*/1"),
+    },
+}
+

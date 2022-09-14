@@ -6,6 +6,7 @@ from CW_places.views import CWPlacesView
 router = routers.DefaultRouter()
 router.register(r'cw_places', CWPlacesView)
 
+"""Define the mapping between URLs and views. """
 urlpatterns = [
-    path('', include(router.urls)),
+    path('api/', include(router.urls)),
 ]

@@ -5,7 +5,9 @@ from car_washes.serializers import CarWashesSerializer
 
 
 class CarWashesSerializerTest(TestCase):
-    
+    """
+    Testing instance data and validation for the Car Wash serializer
+    """
     def setUp(self):
         self.car_wash = CarWashesFactory()
     

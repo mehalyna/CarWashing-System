@@ -3,6 +3,10 @@ from django.contrib.auth.hashers import make_password
 
 
 class AccountsManager(BaseUserManager):
+    """
+    Manager for the custom Accounts model.
+    """
+
     def _create_user(self, email, password, **extra_fields):
         """
         Creates and saves an Account with the given email and password.
