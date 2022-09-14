@@ -4,8 +4,10 @@ from car_washes.models import CarWashes
 from places.models import Places
 
 
-class TimeStampedModel(models.Model):
 
+class CWPlaces(models.Model):
+
+class TimeStampedModel(models.Model):
     """Additional class to add extra functionality to the main class"""
     added = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
